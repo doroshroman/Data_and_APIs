@@ -5,17 +5,35 @@
     </head>
     <body>
         <img src="" id="rails" width=500/>
+        <img src="" id="rails-server" width=600>
+        <img src="" id="diagram" width=600>
         <script>
-            fetchImage()
+            fetchImage("rails_server.png", "rails")
                 .catch(error =>{
                     console.log("Error was triggered!");
                     console.log(error);
                 });
 
-            async function fetchImage(){
-                const response = await fetch("rails_server.png");
+            // More images    
+            fetchImages()
+            .catch(error =>{
+                    console.log("Error was triggered!");
+                    console.log(error);
+                });;
+            
+            async function fetchImage(path, id){
+                const response = await fetch(path);
                 const blob = await response.blob();
-                document.getElementById("rails").src = URL.createObjectURL(blob);
+                document.getElementById(id).src = URL.createObjectURL(blob);
+            }
+            async function fetchImages(){
+                let path_to_id = new Map([
+                    ["rails_server.png", "rails-server"],
+                    ["diagram.png", "diagram"]]);
+                for(let [path, id] of path_to_id){
+                    fetchImage(path, id);
+                }
+                
             }
 
             // More complicated way
