@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Load plain text with Promises</title>
+        <style>
+            *{
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Speech: “To be, or not to be, that is the question”</h1>
+        <h4>BY WILLIAM SHAKESPEARE</h4>
+        <p id="speech"></p>
+        <script>
+
+            loadPoem()
+            .catch(error =>{
+                console.log(error);
+            });
+
+            async function loadPoem(){
+                const response = await fetch("hamlet.txt");
+                const text = await response.text();
+                console.log(text);
+                document.getElementById('speech').innerHTML = "<pre>" + text + "</pre>";
+            }
+        </script>
+</body>
+</html>
