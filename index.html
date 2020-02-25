@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <img src="" id="rails" width=500/>
+        <script>
+            fetchImage()
+                .catch(error =>{
+                    console.log("Error was triggered!");
+                    console.log(error);
+                });
+
+            async function fetchImage(){
+                const response = await fetch("rails_server.png");
+                const blob = await response.blob();
+                document.getElementById("rails").src = URL.createObjectURL(blob);
+            }
+
+            // More complicated way
+            // console.log("I create the promise!")
+            // fetch("rails_server.png")
+            //     .then(response => {
+            //         return response.blob();
+            //     })
+            //     .then(blob => {
+            //         console.log(blob);
+            //         document.getElementById("rails").src = URL.createObjectURL(blob);
+            //     })
+            //     .catch(error =>{
+            //         console.log(error);
+            //     })
+        </script>
+    </body>
+</html>
