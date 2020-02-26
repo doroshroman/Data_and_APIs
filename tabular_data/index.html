@@ -3,12 +3,54 @@
     <head>
         <meta charset="utf-8">
         <title>Tabular Data and Graph</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     </head>
     <body>
+        <canvas id="chart" width="800" height="200"></canvas>
         <script>
-            getData();
+            chartIt();
+
+        async function chartIt(){
+            // wait for data then do next stuff 
+            const data = await getData();
+            console.log(data);
+            const ctx = document.getElementById('chart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.xs,
+                    datasets: [{
+                        label: 'Global Average Temperature',
+                        data: data.ys,
+                        fill: false,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Nothern Hemisphere Temperatures',
+                        data: data.norths,
+                        fill: false,
+                        backgroundColor: 'rgba(99, 255, 132, 0.2)',
+                        borderColor: 'rgba(99, 255, 132, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'South Hemisphere Temperatures',
+                        data: data.souths,
+                        fill: false,
+                        backgroundColor: 'rgba(99, 132, 255, 0.2)',
+                        borderColor: 'rgba(99, 132, 255, 1)',
+                        borderWidth: 1
+                    }]
+                }
+            });
+            }
 
             async function getData(){
+                const xs = [];
+                const ys = [];
+                const norths = [];
+                const souths = [];
+
                 const response = await fetch('ZonAnn.Ts+dSST.csv');
                 const data = await response.text();
 
@@ -16,10 +58,19 @@
                 rows.forEach(elt => {
                     const row = elt.split(',');
                     const year = row[0];
+                    xs.push(year);
                     const temp = row[1]; 
-                    console.log(year, temp);
+                    ys.push(parseFloat(temp) + 14);
+                    const north = row[2];
+                    norths.push(parseFloat(north) + 14);
+                    const south = row[3];
+                    souths.push(parseFloat(south) + 14);
+                    
                 });
+                return {xs, ys, norths, souths};
             }
+
+
         </script>
     </body>
 </html>
