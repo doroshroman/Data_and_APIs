@@ -9,6 +9,12 @@
         <p>latitude: <span id="lat"></span><br>
             longitude: <span id="lon"></span>
         </p>
+
+        <div>
+            <h3 id="meme-title"></h3>
+            <img id="meme-pic" src="" width="400" height="400">
+        </div>
+
         <script>
             const url = 'https://api.wheretheiss.at/v1/satellites/25544';
             async function getISS(){
@@ -18,9 +24,19 @@
                 document.getElementById('lat').textContent = latitude;
                 document.getElementById('lon').textContent = longitude;
             }
-            
-            getISS();
-            
+            setInterval(getISS, 1000);
+
+            // Memes api url
+            const memes_url = 'https://meme-api.herokuapp.com/gimme'
+            async function getMeme(){
+                const response = await fetch(memes_url);
+                const data = await response.json();
+                const {title, url} = data;
+                document.getElementById('meme-title').textContent = title;
+                document.getElementById('meme-pic').src = url;
+            }
+            setInterval(getMeme, 10000);
+           
         </script>
     </body>
 </html>
