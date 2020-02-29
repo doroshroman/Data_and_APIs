@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Data selfie app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "example",
+    "data",
+    "server"
+  ],
+  "author": "Dorosh Roman",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
