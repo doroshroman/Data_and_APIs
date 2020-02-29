@@ -4,7 +4,25 @@
         <meta charset="utf-8">
     </head>
     <body>
+        <script>
+            if('geolocation' in navigator){
+                console.log('geolocation is available');
+                navigator.geolocation.getCurrentPosition(position =>{
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    document.getElementById('lat').textContent = latitude.toFixed(2);
+                    document.getElementById('lon').textContent = longitude.toFixed(2);
+                });
+            }else{
+                console.log('geolocation isn\'t available');
+            }
+        </script>
+
         <h1>Data selfie app</h1>
         <a href="/iss/index.html">ISS location</a>
+        <p>latitude: <span id="lat"></span>&deg;<br>
+        longitude: <span id="lon"></span>&deg;
+        </p>
     </body>
 </html>
