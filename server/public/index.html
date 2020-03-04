@@ -2,19 +2,36 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.min.js"></script>
     </head>
     <body>
-        <script>
-            if('geolocation' in navigator){
-                console.log('geolocation is available');
-                navigator.geolocation.getCurrentPosition(async position =>{
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
+        <h1>Data selfie app</h1>
+        <a href="/iss/index.html">ISS location</a> | 
+        <a href="all.html">All data</a>
 
-                    document.getElementById('lat').textContent = latitude.toFixed(2);
-                    document.getElementById('lon').textContent = longitude.toFixed(2);
-                    
-                    const data = { latitude, longitude };
+        <p>latitude: <span id="lat"></span>&deg;<br>
+        longitude: <span id="lon"></span>&deg;
+        </p>
+        <p> What's your mood today?
+        <input type="text" id="mood">
+        <button id="send-data">Send</button>
+        </p>
+
+        <script>
+
+            function setup(){
+                noCanvas();
+                const video = createCapture(VIDEO);
+                video.size(520, 340);
+
+                let lat, lon;
+
+                document.getElementById('send-data').addEventListener('click', async () =>{
+                    const mood = document.getElementById('mood').value;
+                    video.loadPixels();
+                    const image64 = video.canvas.toDataURL();
+
+                    const data = { lat, lon, mood, image64};
                     const options = {
                         method: 'POST',
                         headers: {
@@ -22,24 +39,30 @@
                         },
                         body: JSON.stringify(data)
                     }
-
-                    document.getElementById('send-data').addEventListener('click',async () =>{
                         const response = await fetch('/api', options);
                         const json = await response.json();
                         console.log(json);
-                    });
-                    
                 });
-            }else{
-                console.log('geolocation isn\'t available');
+
+                if('geolocation' in navigator){
+                    console.log('geolocation is available');
+                    navigator.geolocation.getCurrentPosition(async position =>{
+                        lat = position.coords.latitude;
+                        lon = position.coords.longitude;
+
+                        document.getElementById('lat').textContent = lat.toFixed(2);
+                        document.getElementById('lon').textContent = lon.toFixed(2);
+                    });
+                }else{
+                    console.log('geolocation isn\'t available');
+                }
+
+                
             }
+            
+           
         </script>
 
-        <h1>Data selfie app</h1>
-        <a href="/iss/index.html">ISS location</a>
-        <p>latitude: <span id="lat"></span>&deg;<br>
-        longitude: <span id="lon"></span>&deg;
-        </p>
-        <button id="send-data">Send</button>
+        
     </body>
 </html>
